@@ -1,7 +1,3 @@
-# Write your code here!
-
-require 'pry'
-
 def game_hash
   {
     :home => {
@@ -261,27 +257,20 @@ big_shoe_rebounds
 def most_points_scored
   game_hash
 
-  #return player that has most points
-
 end
 
 def winning_team
   game_hash
-
-  #return team that has most points
 
 end
 
 def player_with_longest_name
   game_hash
 
-  #return player with longest name
 
 end
 
 def long_name_steals_a_ton?
   game_hash
-
-  #return true IF player with longest name has the most steals
 
 end
