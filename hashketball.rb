@@ -103,174 +103,70 @@ def game_hash
                           }
 end
 
-def num_points_scored(player_name)
-  points = 0
-
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if attribute == :players
-        data.each do |player, stat_hash|
-          if player == player_name
-            points = stat_hash[:points]
-            break
-          end
-        end
-      end
-    end
-  end
-  points
-end
-
-=begin
 def num_points_scored(name)
-  player = find_the_player(name)
-  player.fetch(:points)
-end
-
-
-def find_the_team(team_name)
-  teams.find {|team| team.fetch(:team_name) == team_name}
-end
-
-def find_the_player(name)
-  players.find {|player| player.fetch(:player_name) == name}
-end
-=end
-
-def shoe_size(player_name)
-  shoe_size = 0
-
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if attribute == :players
-        data.each do |player, stat_hash|
-          if player == player_name
-            shoe_size = stat_hash[:shoe]
-            break
-          end
-        end
+  game_hash.each do |team, data_hash|
+    data_hash[:players].each do |player, player_hash|
+      if player == name
+        return player_hash[:points]
       end
     end
   end
-  shoe_size
 end
 
-def team_colors(team_name)
-  color = []
-
-  game_hash.each do |location, team_data|
-    if team_data[:team_name] == team_name
-      color = team_data[:colors]
+def shoe_size(name)
+  game_hash.each do |team, data_hash|
+    data_hash[:players].each do |player, player_hash|
+      if player == name
+        return player_hash[:shoe]
+      end
     end
   end
-  color
+end
+
+def team_colors(team_arg)
+  game_hash.each do |team, data_hash|
+    if data_hash[:team_name] == team_arg
+      return data_hash[:colors]
+    end
+  end
 end
 
 def team_names
-
-  names = []
-
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if attribute == :team_name
-        names << data
-      end
-    end
+  game_hash.collect do |team, data_hash|
+    data_hash[:team_name]
   end
-  names
 end
 
-team_names
-
-def player_numbers(team_name)
-  jerseys = []
-
-  game_hash.each do |location, team_data|
-    if team_data[:team_name] == team_name
-      team_data.each do |attribute, data|
-        if attribute == :players
-          data.each do |player, stats|
-            jerseys << stats[:number]
-          end
-        end
+def player_numbers(team_arg)
+  game_hash.each do |team, data_hash|
+    if data_hash[:team_name] == team_arg
+      return data_hash[:players].collect do |player, player_hash|
+        player_hash[:number]
       end
     end
   end
-  jerseys
 end
 
-def player_stats(player_name)
-  hash = {}
-
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if attribute == :players
-        data.each do |player, stat_hash|
-          if player == player_name
-            hash = stat_hash
-            break
-          end
-        end
+def player_stats(name)
+  game_hash.each do |team, data_hash|
+    data_hash[:players].each do |player, player_hash|
+      if player == name
+        return player_hash
       end
     end
   end
-
-  #return hash of player stats -- see below
-=begin
-  player_stats("Alan Anderson")
-=> { :number => 0,
-     :shoe => 16,
-     :points => 22,
-     :rebounds => 12,
-     :assists => 12,
-     :steals => 3,
-     :blocks => 1,
-     :slam_dunks => 1
-   }
-=end
-  hash
 end
 
 def big_shoe_rebounds
-
-  hash = {shoe:0, rebounds:0}
-
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if attribute == :players
-        data.each do |player, stat_hash|
-          if stat_hash[:shoe] > hash[:shoe]
-            hash[:shoe] = stat_hash[:shoe]
-            hash[:rebounds] = stat_hash[:rebounds]
-          end
-        end
+  largest_shoe = 0
+  largest_shoe_rebounds = 0
+  game_hash.each do |team, data_hash|
+    data_hash[:players].each do |player, player_hash|
+      if player_hash[:shoe] > largest_shoe
+        largest_shoe = player_hash[:shoe]
+        largest_shoe_rebounds = player_hash[:rebounds]
       end
     end
   end
-  hash[:rebounds]
-end
-
-big_shoe_rebounds
-
-
-
-def most_points_scored
-  game_hash
-
-end
-
-def winning_team
-  game_hash
-
-end
-
-def player_with_longest_name
-  game_hash
-
-
-end
-
-def long_name_steals_a_ton?
-  game_hash
-
+  largest_shoe_rebounds
 end
